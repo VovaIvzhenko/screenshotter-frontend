@@ -5,11 +5,10 @@ import classNames from 'classnames';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Header from '../components/Header/Header.jsx'
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import routes from "../routes.js";
 
-const drawerWidth = 300;
 const switchRoutes = (
 	<Switch>
 		{routes.map((prop, key) => {
@@ -44,14 +43,12 @@ const styles = theme => ({
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
 		}),
-		marginLeft: -drawerWidth,
 	},
 	contentShift: {
 		transition: theme.transitions.create('margin', {
 			easing: theme.transitions.easing.easeOut,
 			duration: theme.transitions.duration.enteringScreen,
-		}),
-		marginLeft: 0,
+		})
 	},
 });
 
@@ -71,10 +68,7 @@ class PersistentDrawerLeft extends React.Component {
 		return (
 			<div className={classes.root}>
 				<CssBaseline/>
-				<Header
-					leftSidebarOpened={open}
-					handleDrawerOpen={this.handleDrawerOpen}
-				/>
+				<Header handleDrawerOpen={this.handleDrawerOpen}/>
 				<main
 					className={classNames(classes.content, {
 						[classes.contentShift]: open,
