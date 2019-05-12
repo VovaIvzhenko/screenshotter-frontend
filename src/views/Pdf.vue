@@ -91,6 +91,7 @@ export default {
 				displayHeaderFooter: false,
 				printBackground: true,
 				landscape: false,
+                json: true
             }
 		}
 	},
