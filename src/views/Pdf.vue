@@ -1,72 +1,111 @@
 <template>
     <div class="pdf">
-        <h2># PDF</h2>
-        <v-btn @click="test">
-            Click
-        </v-btn>
-        {{getDevices}}
-        <v-autocomplete
-                v-model="model"
-                :hint="!isEditing ? 'Click the icon to edit' : 'Click the icon to save'"
-                :items="states"
-                :label="`State — ${isEditing ? 'Editable' : 'Readonly'}`"
-                persistent-hint
-                prepend-icon="mdi-city"
-        >
-            <template v-slot:append-outer>
-                <v-slide-x-reverse-transition
-                        mode="out-in"
-                >
-                    <v-icon
-                            :key="`icon-${isEditing}`"
-                            :color="isEditing ? 'success' : 'info'"
-                            @click="isEditing = !isEditing"
-                            v-text="isEditing ? 'mdi-check-outline' : 'mdi-circle-edit-outline'"
-                    ></v-icon>
-                </v-slide-x-reverse-transition>
-            </template>
-        </v-autocomplete>
+        <v-layout row wrap>
+            <v-flex xs12>
+                <v-text-field
+                        v-model="site"
+                        :label="label"
+                        append-icon="fas fa-file-pdf"
+                        @click:append="fetchPdf"
+                        @keyup.enter="fetchPdf"
+                        solo-inverted
+                        flat
+                ></v-text-field>
+            </v-flex>
+            <v-flex lg4 md4 xs12>
+                <v-card>
+                    <v-card-title class="headline font-weight-regular blue-grey white--text">
+                        PDF options
+                    </v-card-title>
+                    <v-card-text>
+                        <v-slider
+                                v-model="pdfOpts.scale"
+                                label="Scale:"
+                                min="0.1"
+                                max="2"
+                                step="0.1"
+                                thumb-label
+                        ></v-slider>
+                        <v-switch v-model="pdfOpts.printBackground" label="Print background graphics"></v-switch>
+                        <v-switch v-model="pdfOpts.displayHeaderFooter" label="Display header and footer"></v-switch>
+                        <v-radio-group v-model="pdfOpts.landscape">
+                            <v-radio label="Book" :value="false"></v-radio>
+                            <v-radio label="Landscape" :value="true"></v-radio>
+                        </v-radio-group>
+                    </v-card-text>
+                </v-card>
+                <!--<v-card>
+                    <v-card-title class="headline font-weight-regular blue-grey white--text">
+                        Image options
+                    </v-card-title>
+                    <v-card-text>
+                        #Image options
+                    </v-card-text>
+                </v-card>
+                <v-card>
+                    <v-btn block color="error" dark>
+                        Shot <v-icon right dark>fas fa-camera</v-icon>
+                    </v-btn>
+                </v-card>-->
+            </v-flex>
+            <v-flex lg8 md8 xs12>
+                <v-card>
+                    <v-card-title class="headline font-weight-regular blue-grey white--text">
+                        PDF
+                    </v-card-title>
+                    <v-card-text>
+                        <embed v-if="pdfBuffer && !isLoading"
+                               width="700"
+                               height="450"
+                               :src="pdfBuffer"
+                               style="display: block; width: 100%;"
+                        >
+                        <div v-else-if="isLoading">
+                            loading...
+                            <v-progress-linear :indeterminate="true"></v-progress-linear>
+                        </div>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 
 <script>
 import store from '@/store';
 import { mapGetters } from "vuex";
-import { FETCH_DEVICES } from "../store/action.type";
+import {FETCH_PDF} from "../store/action.type";
 
 export default {
     name: 'Pdf',
     props: {},
-    methods: {
-        test() {
-            store.dispatch(FETCH_DEVICES, '/screenshot/get/devices');
-        }
-    },
     computed: {
-		...mapGetters(["getDevices"])
+		...mapGetters(["isLoading", "pdfBuffer"])
 	},
 	data () {
 		return {
-			isEditing: false,
-			model: null,
-			states: [
-				'Alabama', 'Alaska', 'American Samoa', 'Arizona',
-				'Arkansas', 'California', 'Colorado', 'Connecticut',
-				'Delaware', 'District of Columbia', 'Federated States of Micronesia',
-				'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho',
-				'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
-				'Louisiana', 'Maine', 'Marshall Islands', 'Maryland',
-				'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
-				'Missouri', 'Montana', 'Nebraska', 'Nevada',
-				'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
-				'North Carolina', 'North Dakota', 'Northern Mariana Islands', 'Ohio',
-				'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico',
-				'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee',
-				'Texas', 'Utah', 'Vermont', 'Virgin Island', 'Virginia',
-				'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-			]
+			site: 'https://google.com',
+			label: 'https://www.wikipedia.org',
+			pdfOpts: {
+				scale: 1,
+				displayHeaderFooter: false,
+				printBackground: true,
+				landscape: false,
+            }
 		}
-	}
+	},
+	methods: {
+		fetchPdf() {
+            if (this.isLoading) return false;
+
+			this.site = this.site ? this.site : this.label;
+
+			store.dispatch(FETCH_PDF, {
+				site: encodeURIComponent(this.site),
+				pdfOpts: this.pdfOpts
+            })
+		}
+    }
 }
 </script>
 
