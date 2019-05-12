@@ -28,10 +28,17 @@
                         ></v-slider>
                         <v-switch v-model="pdfOpts.printBackground" label="Print background graphics"></v-switch>
                         <v-switch v-model="pdfOpts.displayHeaderFooter" label="Display header and footer"></v-switch>
-                        <v-radio-group v-model="pdfOpts.landscape">
-                            <v-radio label="Book" :value="false"></v-radio>
-                            <v-radio label="Landscape" :value="true"></v-radio>
-                        </v-radio-group>
+
+                        <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                                <v-radio-group v-model="pdfOpts.landscape">
+                                    <v-radio label="Book" :value="false" v-on="on"></v-radio>
+                                    <v-radio label="Landscape" :value="true" v-on="on"></v-radio>
+                                </v-radio-group>
+                            </template>
+                            <span>Paper orientation.</span>
+                        </v-tooltip>
+
                     </v-card-text>
                 </v-card>
                 <!--<v-card>
@@ -63,6 +70,9 @@
                         <div v-else-if="isLoading">
                             loading...
                             <v-progress-linear :indeterminate="true"></v-progress-linear>
+                        </div>
+                        <div v-else>
+                            <h2>Enter the site and generate PDF right now :D</h2>
                         </div>
                     </v-card-text>
                 </v-card>

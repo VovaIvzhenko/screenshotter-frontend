@@ -18,7 +18,12 @@
                         Browser options
                     </v-card-title>
                     <v-card-text>
-                        <v-switch v-model="screenOpts.fullPage" label="Full page"></v-switch>
+                        <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                                <v-switch v-model="screenOpts.fullPage" label="Full page" v-on="on"></v-switch>
+                            </template>
+                            <span>Takes a screenshot of the full scrollable page.</span>
+                        </v-tooltip>
                         <v-autocomplete
                                 v-model="screenOpts.device"
                                 :items="deviceItems"
@@ -27,6 +32,11 @@
                                 label="Resolution:"
                                 persistent-hint
                         >
+                            <template v-slot:prepend-item="{ on }">
+                                <div v-on="on">
+                                    asdasd
+                                </div>
+                            </template>
                         </v-autocomplete>
                         <v-container fluid grid-list-lg>
                             <v-layout row wrap>
@@ -43,13 +53,6 @@
                                 <v-flex xs3>
                                     <v-text-field v-model="screenOpts.height" type="number"></v-text-field>
                                 </v-flex>
-                                <!--
-                                <v-flex xs9>
-                                    <v-slider v-model="blue" :max="500" label="Zoom"></v-slider>
-                                </v-flex>
-                                <v-flex xs3>
-                                    <v-text-field v-model="blue" type="number"></v-text-field>
-                                </v-flex>-->
                             </v-layout>
                         </v-container>
                     </v-card-text>
@@ -65,6 +68,7 @@
                         </v-radio-group>
                         <v-slider
                                 v-model="screenOpts.quality"
+                                :disabled="screenOpts.type === `png`"
                                 label="Quality:"
                                 min="0"
                                 max="100"
@@ -74,7 +78,7 @@
                     </v-card-text>
                 </v-card>
                 <v-card v-if="isMobile">
-                    <v-btn block color="error" dark>
+                    <v-btn block color="error" dark @click="fetchScreenShot">
                         Shot <v-icon right dark>fas fa-camera</v-icon>
                     </v-btn>
                 </v-card>
@@ -93,6 +97,17 @@
                         <div v-else-if="isLoading">
                             loading...
                             <v-progress-linear :indeterminate="true"></v-progress-linear>
+                        </div>
+                        <div v-else>
+                            <blockquote class="blockquote">
+                                <h1>Capture a website screenshot online</h1>
+                            </blockquote>
+                            <v-divider></v-divider>
+                            <blockquote class="blockquote">
+                                <h3>Want to see what your web site looks like on different mobile devices?</h3>
+                            </blockquote>
+                            <v-divider></v-divider>
+                            <h3>Capture a full web-page screenshot with this service</h3>
                         </div>
                     </v-card-text>
                 </v-card>
