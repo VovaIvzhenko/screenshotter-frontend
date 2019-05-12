@@ -35,10 +35,9 @@ const actions = {
 		context.commit(SET_DEVICES, data);
 		return data;
 	},
-
-	async [FETCH_SCREEN_SHOT]({commit}, slug, params) {
+	async [FETCH_SCREEN_SHOT]({commit}, params) {
 		commit(SET_LOADING, true);
-		const {data} = await ApiServices.query(slug, params);
+		const {data} = await ApiServices.query(`/screenshot/site/${params.site}`, params.screenOpts);
 		commit(SET_SCREEN_SHOT_BUFFER, data);
 		commit(SET_LOADING, false);
 		return data;
