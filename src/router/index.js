@@ -11,7 +11,7 @@ export default new Router({
 			component: () => import('@/views/Home')
 		},
 		{
-			path: "/screen-shotter",
+			path: "/screenshot",
 			component: () => import('@/views/ScreenShotter')
 		},
 		{
@@ -20,7 +20,7 @@ export default new Router({
 		},
 		{
 			path: "/login",
-			component: () => import('@/views/ScreenShotter')
+			component: () => import('@/views/Login')
 		},
 		{
 			path: "/register",
