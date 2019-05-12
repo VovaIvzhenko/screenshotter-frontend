@@ -4,26 +4,54 @@
             <v-flex xs12>
                    <v-text-field
                            v-model="site"
-                           label="https://www.wikipedia.org..."
+                           :label="label"
+                           append-icon="fas fa-camera"
+                           @click:append="fetchScreenShot"
+                           @keyup.enter="fetchScreenShot"
                            solo-inverted
                            flat
-                           @keyup.enter="fetchScreenShot"
                    ></v-text-field>
             </v-flex>
-            <v-flex xs4>
+            <v-flex lg4 md4 xs12>
                 <v-card>
                     <v-card-title class="headline font-weight-regular blue-grey white--text">
                         Browser options
                     </v-card-title>
                     <v-card-text>
-                        <v-switch v-model="browserOpts.fullSize" :label="`Full size`"></v-switch>
+                        <v-switch v-model="screenOpts.fullPage" label="Full page"></v-switch>
                         <v-autocomplete
-                                v-model="browserOpts.device"
+                                v-model="screenOpts.device"
                                 :items="deviceItems"
-                                :label="`Resolution:`"
+                                item-text="text"
+                                item-value="value"
+                                label="Resolution:"
                                 persistent-hint
                         >
                         </v-autocomplete>
+                        <v-container fluid grid-list-lg>
+                            <v-layout row wrap>
+                                <v-flex xs9>
+                                    <v-slider v-model="screenOpts.width" :max="10000" label="Width"></v-slider>
+                                </v-flex>
+                                <v-flex xs3>
+                                    <v-text-field v-model="screenOpts.width" type="number"></v-text-field>
+                                </v-flex>
+
+                                <v-flex xs9>
+                                    <v-slider v-model="screenOpts.height" :max="10000" label="Height"></v-slider>
+                                </v-flex>
+                                <v-flex xs3>
+                                    <v-text-field v-model="screenOpts.height" type="number"></v-text-field>
+                                </v-flex>
+                                <!--
+                                <v-flex xs9>
+                                    <v-slider v-model="blue" :max="500" label="Zoom"></v-slider>
+                                </v-flex>
+                                <v-flex xs3>
+                                    <v-text-field v-model="blue" type="number"></v-text-field>
+                                </v-flex>-->
+                            </v-layout>
+                        </v-container>
                     </v-card-text>
                 </v-card>
                 <v-card>
@@ -31,12 +59,12 @@
                         Image options
                     </v-card-title>
                     <v-card-text>
-                        <v-radio-group v-model="imageOpts.type" row>
+                        <v-radio-group v-model="screenOpts.type" row>
                             <v-radio label="PNG" value="png"></v-radio>
                             <v-radio label="JPEG" value="jpeg"></v-radio>
                         </v-radio-group>
                         <v-slider
-                                v-model="imageOpts.quality"
+                                v-model="screenOpts.quality"
                                 label="Quality:"
                                 min="0"
                                 max="100"
@@ -45,11 +73,16 @@
                         ></v-slider>
                     </v-card-text>
                 </v-card>
+                <v-card v-if="isMobile">
+                    <v-btn block color="error" dark>
+                        Shot <v-icon right dark>fas fa-camera</v-icon>
+                    </v-btn>
+                </v-card>
             </v-flex>
-            <v-flex xs8>
+            <v-flex lg8 md8 xs12>
                 <v-card>
                     <v-card-title class="headline font-weight-regular blue-grey white--text">
-                        Screen shot
+                        Screenshot
                     </v-card-title>
                     <v-card-text>
                         <img v-if="screenShot && !isLoading"
@@ -57,8 +90,9 @@
                              :src="screenShot"
                              style="display: block; width: 100%;"
                         >
-                        <div v-if="isLoading">
+                        <div v-else-if="isLoading">
                             loading...
+                            <v-progress-linear :indeterminate="true"></v-progress-linear>
                         </div>
                     </v-card-text>
                 </v-card>
@@ -76,15 +110,22 @@ export default {
     name: 'ScreenShotter',
     props: {},
     computed: {
-    	deviceItems() {
-			return this.getDevices.devices.map((device, key) => {
-    			return `${device.name} - ${device.viewport.height} x ${device.viewport.width}`
-            })
+        deviceItems() {
+			return this.getDevices.devices.map((device) => {
+				return {
+					text: `${device.name} - ${device.viewport.height} x ${device.viewport.width}`,
+                    value: device.name
+                }
+			})
+		},
+        isMobile() {
+        	return window.innerWidth < 480
         },
         ...mapGetters(["getDevices", "screenShot", "isLoading"])
     },
     beforeRouteEnter(to, from, next) {
     	Promise.all([
+    		//TODO:: get ('/screenshot/get/devices') slug from 'to'
     		store.dispatch(FETCH_DEVICES, '/screenshot/get/devices')
         ]).then(() => {
         	next();
@@ -93,25 +134,28 @@ export default {
 	data () {
 		return {
 			site: 'https://google.com',
+            label: 'https://www.wikipedia.org',
 			model: null,
-			browserOpts: {
-				fullSize: true,
+			screenOpts: {
+				fullPage: true,
 				device: null,
-            },
-            imageOpts: {
 				type: 'png',
-				quality: 100
+				quality: 100,
+                width: 0,
+                height: 0
             }
 		}
 	},
     methods: {
     	fetchScreenShot() {
-			const params = {
-                browserOpts: this.browserOpts,
-                imageOpts: this.imageOpts
-            };
-			const slug = `/screenshot/site/${encodeURIComponent(this.site)}`;
-            store.dispatch(FETCH_SCREEN_SHOT, slug, params)
+    		if (this.isLoading) return;
+
+    		this.site = this.site ? this.site : this.label;
+
+            store.dispatch(FETCH_SCREEN_SHOT, {
+				site: encodeURIComponent(this.site),
+				screenOpts: this.screenOpts
+			})
 		}
     }
 }
