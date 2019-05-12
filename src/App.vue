@@ -1,11 +1,13 @@
 <template>
   <div id="app">
-    <Header/>
-    <v-container grid-list-xs grid-list-sm gird-list-md>
-      <transition name="component-fade" mode="out-in">
-         <router-view></router-view>
-      </transition>
-    </v-container>
+    <v-app>
+      <Header/>
+      <v-container grid-list-xs grid-list-sm gird-list-md>
+        <transition name="component-fade" mode="out-in">
+          <router-view></router-view>
+        </transition>
+      </v-container>
+    </v-app>
   </div>
 </template>
 
