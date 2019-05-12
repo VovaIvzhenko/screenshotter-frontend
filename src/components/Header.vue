@@ -7,8 +7,9 @@
             :fixed="true"
             :flat="true"
         >
-            <v-toolbar-side-icon></v-toolbar-side-icon>
-            <v-toolbar-title>ScreenShotter</v-toolbar-title>
+            <v-toolbar-title>
+                <v-icon right dark>fas fa-camera</v-icon> ScreenShotter
+            </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items class="hidden-sm-and-down">
                 <v-btn to="screen-shotter" flat>ScreenShot</v-btn>
