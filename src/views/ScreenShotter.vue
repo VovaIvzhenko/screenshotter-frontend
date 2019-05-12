@@ -52,7 +52,14 @@
                         Screen shot
                     </v-card-title>
                     <v-card-text>
-                        <img alt="Vue logo" :src="screenFromBuffer">
+                        <img v-if="screenShot && !isLoading"
+                             alt="Vue logo"
+                             :src="screenShot"
+                             style="display: block; width: 100%;"
+                        >
+                        <div v-if="isLoading">
+                            loading...
+                        </div>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -74,15 +81,7 @@ export default {
     			return `${device.name} - ${device.viewport.height} x ${device.viewport.width}`
             })
         },
-        screenFromBuffer() {
-    		if (!this.screenShot ) return;
-			let arrayBufferView = new Uint8Array( this.screenShot );
-			let blob = new Blob( [ arrayBufferView ], { type: "image/png" } );
-			let urlCreator = window.URL || window.webkitURL;
-			console.log(urlCreator.createObjectURL(blob));
-			return  urlCreator.createObjectURL( blob );
-		},
-        ...mapGetters(["getDevices", "screenShot"])
+        ...mapGetters(["getDevices", "screenShot", "isLoading"])
     },
     beforeRouteEnter(to, from, next) {
     	Promise.all([

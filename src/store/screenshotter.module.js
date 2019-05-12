@@ -7,12 +7,14 @@ import {
 
 import {
 	SET_DEVICES,
-	SET_SCREEN_SHOT_BUFFER
+	SET_SCREEN_SHOT_BUFFER,
+	SET_LOADING
 } from "./mutation.type";
 
 const state = {
 	devices: [],
-	screenShotBuffer: ''
+	screenShotBuffer: '',
+	isLoading: false
 };
 
 const getters = {
@@ -21,6 +23,9 @@ const getters = {
 	},
 	screenShot(state) {
 		return state.screenShotBuffer
+	},
+	isLoading(state) {
+		return state.isLoading
 	}
 };
 
@@ -31,9 +36,11 @@ const actions = {
 		return data;
 	},
 
-	async [FETCH_SCREEN_SHOT](context, slug, params) {
+	async [FETCH_SCREEN_SHOT]({commit}, slug, params) {
+		commit(SET_LOADING, true);
 		const {data} = await ApiServices.query(slug, params);
-		context.commit(SET_SCREEN_SHOT_BUFFER, data);
+		commit(SET_SCREEN_SHOT_BUFFER, data);
+		commit(SET_LOADING, false);
 		return data;
 	}
 };
@@ -44,6 +51,9 @@ const mutations = {
 	},
 	[SET_SCREEN_SHOT_BUFFER](state, buffer) {
 		state.screenShotBuffer = buffer;
+	},
+	[SET_LOADING](state, isLoading) {
+		state.isLoading = isLoading;
 	},
 };
 
