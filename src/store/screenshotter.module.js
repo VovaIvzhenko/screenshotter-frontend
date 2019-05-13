@@ -9,7 +9,8 @@ import {
 import {
 	SET_DEVICES,
 	SET_SCREEN_SHOT_BUFFER,
-	SET_LOADING
+	SET_LOADING,
+	SET_SNACK_BAR_OPTS,
 } from "./mutation.type";
 
 const state = {
@@ -43,8 +44,16 @@ const actions = {
 	async [CREATE_SCREEN_SHOT](context, params) {
 		context.commit(SET_LOADING, true);
 		const {data} = await ApiServices.query(`/screenshot/site/${params.site}`, params.screenOpts);
-		context.commit(SET_SCREEN_SHOT_BUFFER, data);
+
+		if (data.error) {
+			context.commit(SET_SNACK_BAR_OPTS, {
+				active: true,
+				color: 'error',
+				text: data.error
+			})
+		}
 		context.commit(SET_LOADING, false);
+		context.commit(SET_SCREEN_SHOT_BUFFER, data);
 
 		context.dispatch(CREATE_ACTIVITY_LOG, {
 			action: 'click',

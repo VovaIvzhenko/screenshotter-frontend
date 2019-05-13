@@ -6,3 +6,4 @@ export const SET_MOBILE = 'setMobile';
 export const OPEN_DRAWER = 'openDrawer';
 export const SET_ACTIVITY_DATA = 'setActivityData';
 export const RESET_ACTIVITY_DATA = 'resetActivityData';
+export const SET_SNACK_BAR_OPTS = 'setSnackBarOpts';

@@ -7,7 +7,7 @@ import {
 
 import {
 	SET_PDF_BUFFER,
-	SET_LOADING
+	SET_LOADING, SET_SNACK_BAR_OPTS
 } from "./mutation.type";
 
 const state = {
@@ -24,6 +24,14 @@ const actions = {
 	async [GENERATE_PDF](context, params) {
 		context.commit(SET_LOADING, true);
 		const {data} = await ApiServices.query(`/pdf/site/${params.site}`, params.pdfOpts);
+
+		if (data.error) {
+			context.commit(SET_SNACK_BAR_OPTS, {
+				active: true,
+				color: 'error',
+				text: data.error
+			})
+		}
 		context.commit(SET_PDF_BUFFER, data);
 		context.commit(SET_LOADING, false);
 
