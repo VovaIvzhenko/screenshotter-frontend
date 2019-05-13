@@ -34,7 +34,8 @@ const getters = {
 const actions = {
 	async [CREATE_ACTIVITY_LOG](context, params) {
 		context.commit(SET_ACTIVITY_DATA, params);
-		await ApiServices.post('/create/log', context.getters['getActivity'])
+		const url = '/create/log';
+		await ApiServices.post(url, context.getters['getActivity'])
 		.catch(() => {}).then(() => {
 			context.commit(RESET_ACTIVITY_DATA);
 		});

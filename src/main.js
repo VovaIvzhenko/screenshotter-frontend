@@ -24,6 +24,7 @@ router.beforeEach((to, from, next) => {
 			userId:0
 		})
 	]).then(() => {
+		document.title = to.meta.title
 		next();
 	})
 });
