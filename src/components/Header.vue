@@ -7,9 +7,11 @@
             :fixed="true"
             :flat="true"
         >
-            <v-toolbar-title>
-                <v-icon right dark>fas fa-camera</v-icon> ScreenShotter
-            </v-toolbar-title>
+            <router-link to="/" tag="span" exact style="cursor: pointer;">
+                <v-toolbar-title>
+                    <v-icon right dark>fas fa-camera</v-icon> ScreenShotter
+                </v-toolbar-title>
+            </router-link>
             <v-spacer></v-spacer>
             <v-toolbar-items class="hidden-sm-and-down">
                 <v-btn to="screenshot" flat>ScreenShot</v-btn>
