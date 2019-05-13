@@ -145,7 +145,7 @@ export default {
     },
 	data () {
 		return {
-			site: 'https://google.com',
+			site: '',
             label: 'https://www.wikipedia.org',
 			model: null,
 			screenOpts: {
