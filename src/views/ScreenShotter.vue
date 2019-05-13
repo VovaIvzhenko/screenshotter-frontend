@@ -138,7 +138,7 @@ export default {
     beforeRouteEnter(to, from, next) {
     	Promise.all([
     		//TODO:: get ('/screenshot/get/devices') slug from 'to'
-    		store.dispatch(FETCH_DEVICES, '/screenshot/get/devices')
+    		store.dispatch(FETCH_DEVICES)
         ]).then(() => {
         	next();
         })

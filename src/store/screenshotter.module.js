@@ -30,8 +30,8 @@ const getters = {
 };
 
 const actions = {
-	async [FETCH_DEVICES](context, slug) {
-		const {data} = await ApiServices.get(slug);
+	async [FETCH_DEVICES](context) {
+		const {data} = await ApiServices.get('/screenshot/get/devices');
 		context.commit(SET_DEVICES, data);
 		return data;
 	},
