@@ -32,8 +32,12 @@ const getters = {
 
 const actions = {
 	async [FETCH_DEVICES](context) {
+		if (context.getters['getDevices'].length) {
+			return false;
+		}
 		const {data} = await ApiServices.get('/screenshot/get/devices');
-		context.commit(SET_DEVICES, data);
+		context.commit(SET_DEVICES, data.devices);
+
 		return data;
 	},
 	async [CREATE_SCREEN_SHOT](context, params) {

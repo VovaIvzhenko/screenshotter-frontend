@@ -126,7 +126,7 @@ export default {
     props: {},
     computed: {
         deviceItems() {
-			return this.getDevices.devices.map((device) => {
+			return this.getDevices.map((device) => {
 				return {
 					text: `${device.name} - ${device.viewport.width} x ${device.viewport.height}`,
                     value: device.name
