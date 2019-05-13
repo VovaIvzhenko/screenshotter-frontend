@@ -90,7 +90,7 @@
                     </v-card-title>
                     <v-card-text>
                         <img v-if="screenShot && !isLoading"
-                             alt="Vue logo"
+                             :alt="site"
                              :src="screenShot"
                              style="display: block; width: 100%;"
                         >

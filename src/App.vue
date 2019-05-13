@@ -8,6 +8,7 @@
           <router-view></router-view>
         </transition>
       </v-container>
+      <SnackBar/>
     </v-app>
   </div>
 </template>
@@ -17,12 +18,14 @@ import store from '@/store'
 import {SET_MOBILE} from "./store/mutation.type";
 import Header from './components/Header.vue'
 import Drawer from './components/Drawer.vue'
+import SnackBar from './components/SnackBar.vue'
 
 export default {
 	name: 'app',
 	components: {
 		Header,
-		Drawer
+		Drawer,
+		SnackBar,
 	},
     methods: {
 		setMobile() {
