@@ -6,8 +6,8 @@
                            v-model="site"
                            :label="label"
                            append-icon="fas fa-camera"
-                           @click:append="fetchScreenShot"
-                           @keyup.enter="fetchScreenShot"
+                           @click:append="createScreenShot"
+                           @keyup.enter="createScreenShot"
                            solo-inverted
                            flat
                    ></v-text-field>
@@ -78,7 +78,7 @@
                     </v-card-text>
                 </v-card>
                 <v-card v-if="isMobile">
-                    <v-btn block color="error" dark @click="fetchScreenShot">
+                    <v-btn block color="error" dark @click="createScreenShot">
                         Shot <v-icon right dark>fas fa-camera</v-icon>
                     </v-btn>
                 </v-card>
@@ -119,7 +119,7 @@
 <script>
 import store from '@/store';
 import { mapGetters } from 'vuex'
-import {FETCH_DEVICES, FETCH_SCREEN_SHOT} from "../store/action.type";
+import {FETCH_DEVICES, CREATE_SCREEN_SHOT} from "../store/action.type";
 
 export default {
     name: 'ScreenShotter',
@@ -159,15 +159,15 @@ export default {
 		}
 	},
     methods: {
-    	fetchScreenShot() {
+    	createScreenShot() {
     		if (this.isLoading) return;
 
     		this.site = this.site ? this.site : this.label;
 
-            store.dispatch(FETCH_SCREEN_SHOT, {
+            store.dispatch(CREATE_SCREEN_SHOT, {
 				site: encodeURIComponent(this.site),
 				screenOpts: this.screenOpts
-			})
+			});
 		}
     }
 }

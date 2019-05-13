@@ -1,7 +1,8 @@
 import ApiServices from '@/common/api.service';
 
 import {
-	FETCH_PDF
+	CREATE_ACTIVITY_LOG,
+	GENERATE_PDF
 } from "./action.type";
 
 import {
@@ -20,11 +21,18 @@ const getters = {
 };
 
 const actions = {
-	async [FETCH_PDF]({commit}, params) {
-		commit(SET_LOADING, true);
+	async [GENERATE_PDF](context, params) {
+		context.commit(SET_LOADING, true);
 		const {data} = await ApiServices.query(`/pdf/site/${params.site}`, params.pdfOpts);
-		commit(SET_PDF_BUFFER, data);
-		commit(SET_LOADING, false);
+		context.commit(SET_PDF_BUFFER, data);
+		context.commit(SET_LOADING, false);
+
+		context.dispatch(CREATE_ACTIVITY_LOG, {
+			action: 'click',
+			subject: GENERATE_PDF,
+			userId: context.getters['getUserId'] || 0,
+			extra: params.pdfOpts
+		});
 		return data;
 	}
 };

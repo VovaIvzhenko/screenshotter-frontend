@@ -12,7 +12,8 @@ import {
 const initialActivityData = {
 	action: '',
 	subject: '',
-	userId: ''
+	userId: 0,
+	extra: null
 };
 
 const state = {

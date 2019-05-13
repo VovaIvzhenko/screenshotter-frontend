@@ -84,7 +84,7 @@
 <script>
 import store from '@/store';
 import { mapGetters } from "vuex";
-import {FETCH_PDF} from "../store/action.type";
+import {GENERATE_PDF} from "../store/action.type";
 
 export default {
     name: 'Pdf',
@@ -111,7 +111,7 @@ export default {
 
 			this.site = this.site ? this.site : this.label;
 
-			store.dispatch(FETCH_PDF, {
+			store.dispatch(GENERATE_PDF, {
 				site: encodeURIComponent(this.site),
 				pdfOpts: this.pdfOpts
             })

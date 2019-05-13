@@ -2,7 +2,8 @@ import ApiServices from '@/common/api.service';
 
 import {
 	FETCH_DEVICES,
-	FETCH_SCREEN_SHOT
+	CREATE_SCREEN_SHOT,
+	CREATE_ACTIVITY_LOG,
 } from "./action.type";
 
 import {
@@ -35,11 +36,18 @@ const actions = {
 		context.commit(SET_DEVICES, data);
 		return data;
 	},
-	async [FETCH_SCREEN_SHOT]({commit}, params) {
-		commit(SET_LOADING, true);
+	async [CREATE_SCREEN_SHOT](context, params) {
+		context.commit(SET_LOADING, true);
 		const {data} = await ApiServices.query(`/screenshot/site/${params.site}`, params.screenOpts);
-		commit(SET_SCREEN_SHOT_BUFFER, data);
-		commit(SET_LOADING, false);
+		context.commit(SET_SCREEN_SHOT_BUFFER, data);
+		context.commit(SET_LOADING, false);
+
+		context.dispatch(CREATE_ACTIVITY_LOG, {
+			action: 'click',
+			subject: CREATE_SCREEN_SHOT,
+			userId: context.getters['getUserId'] || 0,
+			extra: params.screenOpts
+		});
 		return data;
 	}
 };
