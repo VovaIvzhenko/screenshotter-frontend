@@ -128,7 +128,7 @@ export default {
         deviceItems() {
 			return this.getDevices.devices.map((device) => {
 				return {
-					text: `${device.name} - ${device.viewport.height} x ${device.viewport.width}`,
+					text: `${device.name} - ${device.viewport.width} x ${device.viewport.height}`,
                     value: device.name
                 }
 			})
