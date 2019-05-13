@@ -133,10 +133,7 @@ export default {
                 }
 			})
 		},
-        isMobile() {
-        	return window.innerWidth < 480
-        },
-        ...mapGetters(["getDevices", "screenShot", "isLoading"])
+        ...mapGetters(["getDevices", "screenShot", "isLoading", "isMobile"])
     },
     beforeRouteEnter(to, from, next) {
     	Promise.all([
