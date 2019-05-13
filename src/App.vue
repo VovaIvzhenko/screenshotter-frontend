@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <v-app>
+      <Drawer/>
       <Header/>
       <v-container grid-list-xs grid-list-sm gird-list-md>
         <transition name="component-fade" mode="out-in">
@@ -12,13 +13,29 @@
 </template>
 
 <script>
+import store from '@/store'
+import {SET_MOBILE} from "./store/mutation.type";
 import Header from './components/Header.vue'
+import Drawer from './components/Drawer.vue'
 
 export default {
-  name: 'app',
-  components: {
-	  Header
-  }
+	name: 'app',
+	components: {
+		Header,
+		Drawer
+	},
+    methods: {
+		setMobile() {
+			store.commit(SET_MOBILE, window.innerWidth <= 960)
+		}
+    },
+    mounted() {
+		this.setMobile();
+		window.addEventListener('resize', this.setMobile)
+	},
+	destroyed(){
+		document.removeEventListener('resize', this.setMobile);
+	}
 }
 </script>
 
