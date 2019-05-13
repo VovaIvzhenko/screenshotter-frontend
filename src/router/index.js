@@ -8,10 +8,6 @@ export default new Router({
 	routes: [
 		{
 			path: "/",
-			component: () => import('@/views/Home')
-		},
-		{
-			path: "/screenshot",
 			component: () => import('@/views/ScreenShotter')
 		},
 		{
