@@ -6,6 +6,7 @@ import store from './store';
 import ApiServices from './common/api.service'
 import 'vuetify/dist/vuetify.min.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import {CREATE_ACTIVITY_LOG} from "./store/action.type";
 
 Vue.config.productionTip = false;
 
@@ -14,6 +15,18 @@ Vue.use(Vuetify, {
 });
 
 ApiServices.init();
+
+router.beforeEach((to, from, next) => {
+	Promise.all([
+		store.dispatch(CREATE_ACTIVITY_LOG, {
+			action: 'visit',
+			subject: to.fullPath,
+			userId:0
+		})
+	]).then(() => {
+		next();
+	})
+});
 
 new Vue({
   router,
