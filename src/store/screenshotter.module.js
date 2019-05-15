@@ -55,6 +55,8 @@ const actions = {
 		context.commit(SET_LOADING, false);
 		context.commit(SET_SCREEN_SHOT_BUFFER, data);
 
+		params.screenOpts.site = decodeURIComponent(params.site);
+
 		context.dispatch(CREATE_ACTIVITY_LOG, {
 			action: 'click',
 			subject: CREATE_SCREEN_SHOT,

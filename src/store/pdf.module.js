@@ -35,6 +35,8 @@ const actions = {
 		context.commit(SET_PDF_BUFFER, data);
 		context.commit(SET_LOADING, false);
 
+		params.pdfOpts.site = decodeURIComponent(params.site);
+
 		context.dispatch(CREATE_ACTIVITY_LOG, {
 			action: 'click',
 			subject: GENERATE_PDF,
