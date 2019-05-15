@@ -34,7 +34,7 @@ const getters = {
 const actions = {
 	async [CREATE_ACTIVITY_LOG](context, params) {
 		context.commit(SET_ACTIVITY_DATA, params);
-		const url = '/create/log';
+		const url = 'http://api.screenshotter.online/api/v1/log/activity';
 		await ApiServices.post(url, context.getters['getActivity'])
 		.catch(() => {}).then(() => {
 			context.commit(RESET_ACTIVITY_DATA);
